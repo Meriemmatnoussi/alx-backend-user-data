@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-SessionAuth class
+Definition of class SessionAuth
 """
 import base64
 from uuid import uuid4
@@ -11,13 +11,18 @@ from models.user import User
 
 
 class SessionAuth(Auth):
-    """session auth
+    """ Implement Session Authorization protocol methods
     """
     user_id_by_session_id = {}
 
     def create_session(self, user_id: str = None) -> str:
         """
-        creates a Session ID
+        Creates a Session ID for a user with id user_id
+        Args:
+            user_id (str): user's user id
+        Return:
+            None is user_id is None or not a string
+            Session ID in string format
         """
         if user_id is None or not isinstance(user_id, str):
             return None
@@ -27,7 +32,11 @@ class SessionAuth(Auth):
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """
-        returns userId  based on a sessionId
+        Returns a user ID based on a session ID
+        Args:
+            session_id (str): session ID
+        Return:
+            user id or None if session_id is None or not a string
         """
         if session_id is None or not isinstance(session_id, str):
             return None
@@ -35,7 +44,11 @@ class SessionAuth(Auth):
 
     def current_user(self, request=None):
         """
-        return a user instance based on a cookie value
+        Return a user instance based on a cookie value
+        Args:
+            request : request object containing cookie
+        Return:
+            User instance
         """
         session_cookie = self.session_cookie(request)
         user_id = self.user_id_for_session_id(session_cookie)
@@ -44,7 +57,7 @@ class SessionAuth(Auth):
 
     def destroy_session(self, request=None):
         """
-        Del session
+        Deletes a user session
         """
         if request is None:
             return False
